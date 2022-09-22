@@ -1,1 +1,167 @@
-<!DOCTYPE html><html><head><title>Solar System AR | Blend4Web</title><meta name="description" content="Interactive 3D planetarium using WebGL and Augmented Reality technologies." /><meta charset="utf-8"><meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width"><link type="text/css" rel="stylesheet" href="AR.min.css?v=22092022115841"><script type="text/javascript" src="lib/AR.min.js?v=22092022115841"></script><script type="text/javascript" src="./AR.min.js?v=22092022115841"></script></head><body style="background: #000000;"><div class="control" style="display:none;"><select id="video_source" style="z-index: 1;"></select></div><p id="error" style="display:none;"></p><div id="main_canvas_container" style="z-index: -1;"><video id="v" autoplay playsinline></video></div></body></html>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js sample code</title>
+
+        <!-- Babylon.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+        <script src="https://preview.babylonjs.com/ammo.js"></script>
+        <script src="https://preview.babylonjs.com/cannon.js"></script>
+        <script src="https://preview.babylonjs.com/Oimo.js"></script>
+        <script src="https://preview.babylonjs.com/earcut.min.js"></script>
+        <script src="https://preview.babylonjs.com/babylon.js"></script>
+        <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+        <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+        </style>
+    </head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+
+        var startRenderLoop = function (engine, canvas) {
+            engine.runRenderLoop(function () {
+                if (sceneToRender && sceneToRender.activeCamera) {
+                    sceneToRender.render();
+                }
+            });
+        }
+
+        var engine = null;
+        var scene = null;
+        var sceneToRender = null;
+        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+        var createScene = function () {
+    // This creates a basic Babylon Scene object (non-mesh)
+    var scene = new BABYLON.Scene(engine);
+
+    // scene.useDelayedTextureLoading = true;
+
+    // This creates and positions a free camera (non-mesh)
+    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+
+    // This targets the camera to scene origin
+    camera.setTarget(BABYLON.Vector3.Zero());
+
+    // This attaches the camera to the canvas
+    camera.attachControl(canvas, true);
+
+    // Default intensity is 1. Let's dim the light a small amount
+    // light.intensity = 0.7;
+
+    // Our built-in 'ground' shape.
+    var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 30, height: 30 }, scene);
+    ground.receiveShadows = true;
+    const shadowMaterial = new BABYLON.ShadowOnlyMaterial('shadowOnly', scene);
+    ground.material = shadowMaterial;
+
+    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.2, segments: 32}, scene);
+    var sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.2, segments: 32}, scene);
+    var sphere3 = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 0.2, segments: 32}, scene);
+
+    sphere.material = new BABYLON.PBRMaterial('metal', scene);
+    sphere.material.roughness = 0.25;
+    sphere.material.metallic = 1.0;
+    sphere.material.realTimeFiltering = true;
+    sphere.material.realTimeFilteringQuality = BABYLON.Constants.TEXTURE_FILTERING_QUALITY_HIGH;
+    sphere.position.y = 0.1;
+    // sphere.position.z = 1;
+
+    sphere2.setPivotMatrix(BABYLON.Matrix.Translation(0.2, 0.1, 0), false);
+    sphere2.material = new BABYLON.PBRMaterial('metal', scene);
+    sphere2.material.albedoColor = new BABYLON.Color3(0.8, 0.0, 0.3);
+    sphere2.material.roughness = 0.1;
+    sphere2.material.metallic = 0.0;
+
+    sphere3.setPivotMatrix(BABYLON.Matrix.Translation(0.4, 0.1, 0), false);
+    sphere3.material = new BABYLON.PBRMaterial('metal', scene);
+    sphere3.material.roughness = 0.1;
+    sphere3.material.metallic = 0.3;
+    sphere3.material.albedoColor = new BABYLON.Color3(0.3, 0.0, 0.8);
+
+    scene.registerBeforeRender(function () {
+        sphere2.rotation.y += 0.01;
+        sphere3.rotation.y += 0.01;
+    });
+
+    // const mat = new BABYLON.StandardMaterial('mat', scene);
+    // mat.disableLighting = true;
+    // mat.backFaceCulling = false;
+    // ground.material = mat;
+
+    let i = 0;
+
+    scene.createDefaultXRExperienceAsync({
+        uiOptions: {
+            sessionMode: 'immersive-ar',
+            referenceSpaceType: 'local-floor'
+        }
+    }).then((defaultXRExperience) => {
+        const le = defaultXRExperience.baseExperience.featuresManager.enableFeature(BABYLON.WebXRFeatureName.LIGHT_ESTIMATION, 'latest', {
+            // setSceneEnvironmentTexture: true,
+            // cubeMapPollInterval: 1000,
+            createDirectionalLightSource: true,
+            // reflectionFormat: 'srgba8',
+            // disableCubeMapReflection: true
+        });
+        // const shadowGenerator = new BABYLON.ShadowGenerator(512, le.directionalLight)
+        // shadowGenerator.useBlurExponentialShadowMap = true;
+        // shadowGenerator.blurScale = 2;
+        // shadowGenerator.setDarkness(0.2);
+        // shadowGenerator.getShadowMap().renderList.push(sphere, sphere2, sphere3);
+    });
+
+    scene.onDisposeObservable.add(() => {
+    })
+
+    return scene;
+};
+                window.initFunction = async function() {
+                    
+                    
+                    var asyncEngineCreation = async function() {
+                        try {
+                        return createDefaultEngine();
+                        } catch(e) {
+                        console.log("the available createEngine function failed. Creating the default engine instead");
+                        return createDefaultEngine();
+                        }
+                    }
+
+                    window.engine = await asyncEngineCreation();
+        if (!engine) throw 'engine should not be null.';
+        startRenderLoop(engine, canvas);
+        window.scene = createScene();};
+        initFunction().then(() => {sceneToRender = scene                    
+        });
+
+        // Resize
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+    </script>
+</body>
+</html>
