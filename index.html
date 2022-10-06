@@ -25,6 +25,7 @@
       </div>
     </div>
     <script>
+        GetMedia();
         var container = document.querySelector("#unity-container");
         var canvas = document.querySelector("#unity-canvas");
         var loadingBar = document.querySelector("#unity-loading-bar");
@@ -119,9 +120,14 @@
         });
       };
         document.body.appendChild(script);
-        var stream = navigator.getUserMedia({
-            video: true//{facingMode: { exact: "environment" }}
-        });
+        
+
+        async function GetMedia()
+        {
+            var stream = await navigator.getUserMedia({
+                video: true//{facingMode: { exact: "environment" }}
+            });
+        }
     </script>
   </body>
 </html>
