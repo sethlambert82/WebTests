@@ -124,7 +124,7 @@
 
         async function GetMedia()
         {
-            var stream = await navigator.getUserMedia({
+            var stream = await navigator.mediaDevices.getUserMedia({
                 video: true//{facingMode: { exact: "environment" }}
             });
         }
