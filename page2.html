@@ -27,15 +27,10 @@
   <link rel="icon" type="image/png" href="images/favicon.png">
 <script>
 	function checkCookie_Local() {
-		  let user = getCookie("username");
+		  let user = getCookie("passenger");
 		  if (user != "") {
 			alert("Welcome again " + user);
-		  } else {
-			user = prompt("Please enter your name:", "");
-			if (user != "" && user != null) {
-			  setCookie("username", user, 365);
-			}
-		  }
+		  } 
 		} 
 </script>
 </head>
