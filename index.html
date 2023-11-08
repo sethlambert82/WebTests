@@ -1,1 +1,84 @@
-<!DOCTYPE html><html><head><title>Solar System AR | Blend4Web</title><meta name="description" content="Interactive 3D planetarium using WebGL and Augmented Reality technologies." /><meta charset="utf-8"><meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width"><link type="text/css" rel="stylesheet" href="AR.min.css?v=22092022115841"><script type="text/javascript" src="lib/AR.min.js?v=22092022115841"></script><script type="text/javascript" src="./AR.min.js?v=22092022115841"></script></head><body style="background: #000000;"><div class="control" style="display:none;"><select id="video_source" style="z-index: 1;"></select></div><p id="error" style="display:none;"></p><div id="main_canvas_container" style="z-index: -1;"><video id="v" autoplay playsinline></video></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Your page title here :)</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+	<script>
+		function setCookie(cname, cvalue, exdays) {
+		  const d = new Date();
+		  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+		  let expires = "expires="+d.toUTCString();
+		  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+		}
+
+		function getCookie(cname) {
+		  let name = cname + "=";
+		  let ca = document.cookie.split(';');
+		  for(let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+			  c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+			  return c.substring(name.length, c.length);
+			}
+		  }
+		  return "";
+		}
+
+		function checkCookie() {
+		  let user = getCookie("username");
+		  if (user != "") {
+			alert("Welcome again " + user);
+		  } else {
+			user = prompt("Please enter your name:", "");
+			if (user != "" && user != null) {
+			  setCookie("username", user, 365);
+			}
+		  }
+		} 
+	</script>
+</head>
+<body onload="checkCookie()">
+
+
+
+
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <div class="row">
+      <div class="one-half column" style="margin-top: 25%">
+        <h4>Basic Page</h4>
+        <p>This index.html page is a placeholder with the CSS, font and favicon. It's just waiting for you to add some content! If you need some help hit up the <a href="http://www.getskeleton.com">Skeleton documentation</a>.</p>
+      </div>
+    </div>
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
