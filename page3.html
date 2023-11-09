@@ -5,9 +5,31 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | HIDSandbox</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="stylesheet" href="TemplateData/style.css"><script>
+	function getCookie_Local(cname) {
+		  let name = cname + "=";
+		  let ca = document.cookie.split(';');
+		  for(let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+			  c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+			  return c.substring(name.length, c.length);
+			}
+		  }
+		  return "";
+		}
+
+	function checkCookie_Local() {
+		  let user = getCookie_Local("passenger");
+		  if (user != "") {
+			alert("Welcome again " + user);
+		  } 
+		} 
+	</script>
   </head>
-  <body>
+  <body onload="checkCookie_Local()">
   <h4>Welcome to Page 3</h4>
   <a href="index.html">Go To Home</a>
     <div id="unity-container" class="unity-desktop">
